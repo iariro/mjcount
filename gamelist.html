@@ -1,0 +1,23 @@
+<html>
+<head>
+<script type="text/javascript" src="script/mjcount.js"></script>
+<script type="text/javascript" src="script/gamelist.js"></script>
+</head>
+
+<body onload='initGameListPage()'>
+
+<form name="write">
+	<table>
+	<tr><td>店</td><td><input type="text" name="gamecenter"><td></tr>
+	<tr><td>機種</td><td><input type="text" name="gamekind"><td></tr>
+	</table>
+	<input type="button" onclick="addGame()" value="追加">
+	<input type="button" onclick="resetGames()" value="全削除">
+
+	<table id='gamelist' border>
+	<tr><th>ID</th><th>店</th><th>機種</th><th>操作</th></tr>
+	</table>
+</form>
+
+</body>
+</html>

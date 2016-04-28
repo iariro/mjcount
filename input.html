@@ -1,0 +1,69 @@
+<html>
+<head>
+<script type="text/javascript" src="script/mjcount.js"></script>
+<script type="text/javascript" src="script/input.js"></script>
+</head>
+
+<body onload='initInputPage()'>
+<form name="write">
+	<input type="button" onclick="gotoGameListPage()" value="戻る">
+	<table border>
+		<tr><th>result</td><th>count</th></tr>
+		<tr>
+			<td><input type="button" value="ツモ和がり" onclick="addResult(0)"></td>
+			<td align='right'><div id="count0"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="ロン和がり" onclick="addResult(1)"></td>
+			<td align='right'><div id="count1"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="ラストチャンス和がり" onclick="addResult(2)"></td>
+			<td align='right'><div id="count2"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="聴牌ツモ和がられ" onclick="addResult(3)"></td>
+			<td align='right'><div id="count3"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="聴牌ロン和がられ" onclick="addResult(4)"></td>
+			<td align='right'><div id="count4"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="不聴ツモ和がられ" onclick="addResult(5)"></td>
+			<td align='right'><div id="count5"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="不聴ロン和がられ" onclick="addResult(6)"></td>
+			<td align='right'><div id="count6"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="聴牌荒牌" onclick="addResult(7)"></td>
+			<td align='right'><div id="count7"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="不聴荒牌" onclick="addResult(8)"></td>
+			<td align='right'><div id="count8"></div></td>
+		</tr>
+		<tr>
+			<td><input type="button" value="ボーナス" onclick="addResult(9)"></td>
+			<td align='right'><div id="count9"></div></td>
+		</tr>
+	</table>
+
+	<hr>
+
+	<table>
+	<tr><td>in</td><td><input type="text" name="incredit" value="1"><td></tr>
+	<tr><td>out</td><td><input type="text" name="outcredit" value="0"><td></tr>
+	<tr><td>bet</td><td><input type="text" name="betcredit" value="1"><td></tr>
+	</table>
+
+</form>
+
+<hr>
+
+<div id="label1">-</div>
+
+</body>
+</html>
