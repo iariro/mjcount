@@ -18,8 +18,10 @@ function initInputPage()
 	var index = localStorage["currentIndex"];
 	var json = localStorage["results" + index];
 	var results = str2obj(json);
+	var currentCredit = GetCurrentCredit(results);
+	localStorage["currentCredit" + index] = currentCredit;
 
-	printStat(results);
+	printStat(results, currentCredit);
 }
 
 function gotoGameListPage()
@@ -27,14 +29,14 @@ function gotoGameListPage()
 	parent.document.getElementById("content_frame").src = 'gamelist.html';
 }
 
-function printStat(results)
+function printStat(results, currentCredit)
 {
 	var statistics = GetGameDigestStatistics(results);
 
 	document.getElementById("label1").innerHTML =
 		"和率=" + AgariRatio(statistics) + " " +
 		"聴率=" + TenpaiRatio(statistics) + " " +
-		statistics.gameCount;
+		statistics.gameCount + "ゲーム";
 
 	var i;
 
@@ -42,6 +44,8 @@ function printStat(results)
 	{
 		document.getElementById("count" + i).innerHTML = GetResultCount(results, resultType[i]);
 	}
+
+	document.getElementById("label2").innerHTML = currentCredit + "credit";
 }
 
 function addResult(result)
@@ -52,12 +56,15 @@ function addResult(result)
 	var count = results.count;
 
 	var datetime = new Date();
+	var diff = datetime.getTime() - parseInt(results.startdatetime);
+	var adjust = datetime.getTimezoneOffset() * 60 * 1000;
+	var timespan = new Date(diff + adjust);
 
 	results[count] =
 		{
 			'count': count,
 			'result': resultType[result],
-			'datetime': (datetime.getYear() + 1900) + "/" + (datetime.getMonth() + 1) + "/" + datetime.getDate() + " " + datetime.getHours() + ":" + datetime.getMinutes() + ":" + datetime.getSeconds(),
+			'time': timespan.toTimeString().substr(0, 8),
 			'in': document.write.incredit.value,
 			'out': document.write.outcredit.value
 		};
@@ -70,7 +77,73 @@ function addResult(result)
 
 	localStorage["results" + index] = json;
 
-	printStat(results);
+	var currentCredit = parseInt(localStorage["currentCredit" + index]);
+	currentCredit += parseInt(document.write.incredit.value) + parseInt(document.write.outcredit.value);
+
+	if (resultType[result] != 'ボーナス')
+	{
+		// ボーナス以外。
+
+		currentCredit -= parseInt(document.write.betcredit.value);
+	}
+
+	if (currentCredit > 0)
+	{
+		// まだクレジットはある。
+
+		document.write.incredit.value = '0';
+	}
+
+	document.write.outcredit.value = '0';
+
+	if (resultType[result] == 'ツモ和' ||
+		resultType[result] == 'ラス和' ||
+		resultType[result] == 'ロン和' ||
+		resultType[result] == 'ボーナス')
+	{
+		// 和がり。
+
+		if (currentCredit > 0)
+		{
+			// クレジットは１はある。
+
+			document.write.incredit.value = '0';
+		}
+	}
+
+	localStorage["currentCredit" + index] = currentCredit;
+
+	printStat(results, currentCredit);
+}
+
+function in_up()
+{
+	document.write.incredit.value = parseInt(document.write.incredit.value) + 1;
+}
+
+function in_down()
+{
+	document.write.incredit.value = parseInt(document.write.incredit.value) - 1;
+}
+
+function out_up()
+{
+	document.write.outcredit.value = parseInt(document.write.outcredit.value) + 1;
+}
+
+function out_down()
+{
+	document.write.outcredit.value = parseInt(document.write.outcredit.value) - 1;
+}
+
+function bet_up()
+{
+	document.write.betcredit.value = parseInt(document.write.betcredit.value) + 1;
+}
+
+function bet_down()
+{
+	document.write.betcredit.value = parseInt(document.write.betcredit.value) - 1;
 }
 
 function GetResultCount(results, result)
@@ -190,4 +263,45 @@ function TenpaiRatio(statistics)
 
 		return "---%";
 	}
+}
+
+/// <summary>
+/// 現状のクレジット数取得。
+/// </summary>
+/// <returns>クレジット数</returns>
+function GetCurrentCredit(results)
+{
+	var i;
+	var credit = 0;
+
+	for (i=0 ; i<results.count ; i++)
+	{
+		var incredit = parseInt(results[i].in);
+		var outcredit = parseInt(results[i].out);
+		var bet;
+
+		if (results[i].bet != undefined)
+		{
+			// ベット指定あり。
+
+			bet = parseInt(results[i].bet);
+		}
+		else
+		{
+			// ベット指定なし。
+
+			bet = 1;
+		}
+
+		credit += incredit + outcredit;
+
+		if (results[i].result != 'ボーナス')
+		{
+			// ボーナスではない。
+
+			credit -= bet;
+		}
+	}
+
+	return credit;
 }

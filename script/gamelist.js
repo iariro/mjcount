@@ -18,6 +18,7 @@ function addGame()
 	results['count'] = 0;
 	results['gamecenter'] = document.write.gamecenter.value;
 	results['gamekind'] = document.write.gamekind.value;
+	results['startdatetime'] = new Date().getTime();
 
 	var json = obj2str(results);
 	localStorage["results" + gamecount] = json;
@@ -27,6 +28,14 @@ function addGame()
 
 function resetGames()
 {
+	var i;
+	var count = parseInt(localStorage["gamecount"]);
+
+	for (i=0 ; i<count ; i++)
+	{
+		delete localStorage["results" + i];
+	}
+
 	localStorage["gamecount"] = 0;
 	listGameListPage();
 }
@@ -58,10 +67,10 @@ function listGameListPage()
 		table.rows[i + 1].cells[0].innerHTML = i;
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[1].innerHTML = results.gamecenter;
+		table.rows[i + 1].cells[1].innerHTML = results != undefined ? results.gamecenter : '-';
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[2].innerHTML = results.gamekind;
+		table.rows[i + 1].cells[2].innerHTML = results != undefined ? results.gamekind : '-';
 
 		table.rows[i + 1].insertCell(-1);
 		table.rows[i + 1].cells[3].innerHTML =
