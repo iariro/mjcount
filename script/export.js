@@ -9,14 +9,9 @@ function initExportPage()
 
 function copyToClipboard()
 {
-	var text = document.getElementById("exportarea").innerHTML;
-	/*
-	window.clipboardData.setData("text", text);
-	var doc = document.body.createTextRange();
-	doc.moveToElementText(text);
-	doc.execCommand("copy");
-	alert('copy done');
-	*/
+	var obj = document.form1.exportarea.createTextRange();
+	obj.execCommand("Copy");
+	alert('done');
 }
 
 function gotoGameListPage()

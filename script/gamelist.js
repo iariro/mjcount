@@ -34,7 +34,7 @@ var gameKindList =
 		'CAFE PARADISE',
 		'Double Bet麻雀',
 		'Return of SEL雀II',
-		'かぐや姫 其の二'
+		'かぐや姫 其の二',
 		'かぐや姫',
 		'ジャンピューター96',
 		'ジャンピューターDX',

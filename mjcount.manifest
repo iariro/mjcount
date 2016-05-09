@@ -8,6 +8,7 @@ export.html
 gamelist.html
 index.html
 input.html
+image/pai.jpg
 script/export.js
 script/gamelist.js
 script/input.js
