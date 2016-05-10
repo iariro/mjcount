@@ -5,7 +5,7 @@
 
 	<target name="deploy">
 		<copy todir="${APACHE_HTDOCS_PATH}/mjcount/">
-			<fileset dir=".">
+			<fileset dir="contents">
 				<include name="**/*.html" />
 				<include name="**/*.jsp" />
 				<include name="**/*.jpg" />
