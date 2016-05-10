@@ -71,71 +71,28 @@ var gameKindList =
 
 function initGameListPage()
 {
-	listGameListPage();
-
-	var i;
-	var gameCenterSelect = document.getElementById('gamecenter');
-
-	for (i=0 ; i<gameCenterList.length ; i++)
-	{
-	    var option = document.createElement('option');
-
-	    option.setAttribute('value', gameCenterList[i]);
-	    option.innerHTML = gameCenterList[i];
-
-	    gameCenterSelect.appendChild(option);
-	}
-
-	var gameKindSelect = document.getElementById('gamekind');
-
-	for (i=0 ; i<gameKindList.length ; i++)
-	{
-	    var option = document.createElement('option');
-
-	    option.setAttribute('value', gameKindList[i]);
-	    option.innerHTML = gameKindList[i];
-
-	    gameKindSelect.appendChild(option);
-	}
+	setSelectionControl('gamecenter', gameCenterList);
+	setSelectionControl('gamekind', gameKindList);
+	updateGamelist();
 }
 
-function addGame()
-{
-	var gamecount = localStorage["gamecount"];
-	if (gamecount == undefined || gamecount.startsWith('NaN'))
-	{
-		gamecount = 0;
-	}
-
-	localStorage["gamecount"] = parseInt(gamecount) + 1;
-
-	var results = {};
-	results['count'] = 0;
-	results['gamecenter'] = document.write.gamecenter.value;
-	results['gamekind'] = document.write.gamekind.value;
-	results['startdatetime'] = new Date().getTime();
-
-	var json = obj2str(results);
-	localStorage["results" + gamecount] = json;
-
-	initGameListPage();
-}
-
-function resetGames()
+function setSelectionControl(controlName, values)
 {
 	var i;
-	var count = parseInt(localStorage["gamecount"]);
+	var selection = document.getElementById(controlName);
 
-	for (i=0 ; i<count ; i++)
+	for (i=0 ; i<values.length ; i++)
 	{
-		delete localStorage["results" + i];
-	}
+		var option = document.createElement('option');
 
-	localStorage["gamecount"] = 0;
-	listGameListPage();
+		option.setAttribute('value', values[i]);
+		option.innerHTML = values[i];
+
+		selection.appendChild(option);
+	}
 }
 
-function listGameListPage()
+function updateGamelist()
 {
 	var gamecount = localStorage["gamecount"];
 	if (gamecount == undefined)
@@ -172,6 +129,42 @@ function listGameListPage()
 			"<input type='button' value='入力' onclick='gotoInputPage(" + i + ")'>" +
 			"<input type='button' value='エクスポート' onclick='gotoExportPage(" + i + ")'>";
 	}
+}
+
+function addGame()
+{
+	var gamecount = localStorage["gamecount"];
+	if (gamecount == undefined || gamecount.startsWith('NaN'))
+	{
+		gamecount = 0;
+	}
+
+	localStorage["gamecount"] = parseInt(gamecount) + 1;
+
+	var results = {};
+	results['count'] = 0;
+	results['gamecenter'] = document.write.gamecenter.value;
+	results['gamekind'] = document.write.gamekind.value;
+	results['startdatetime'] = new Date().getTime();
+
+	var json = obj2str(results);
+	localStorage["results" + gamecount] = json;
+
+	initGameListPage();
+}
+
+function resetGames()
+{
+	var i;
+	var count = parseInt(localStorage["gamecount"]);
+
+	for (i=0 ; i<count ; i++)
+	{
+		delete localStorage["results" + i];
+	}
+
+	localStorage["gamecount"] = 0;
+	updateGamelist();
 }
 
 function gotoInputPage(index)

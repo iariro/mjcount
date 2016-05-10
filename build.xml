@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<project default="deploy">
+
+	<property file="../../../build.properties" />
+
+	<target name="deploy">
+		<copy todir="${APACHE_HTDOCS_PATH}/mjcount/">
+			<fileset dir=".">
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+				<include name="**/*.jpg" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>
