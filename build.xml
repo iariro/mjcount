@@ -7,7 +7,7 @@
 		<copy todir="${APACHE_HTDOCS_PATH}/mjcount/">
 			<fileset dir="contents">
 				<include name="**/*.html" />
-				<include name="**/*.jsp" />
+				<include name="**/*.js" />
 				<include name="**/*.jpg" />
 			</fileset>
 		</copy>
