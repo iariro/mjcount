@@ -60,7 +60,7 @@ function addResult(result)
 	var adjust = datetime.getTimezoneOffset() * 60 * 1000;
 	var timespan = new Date(diff + adjust);
 
-	results[count] =
+	results['gameResults'][count] =
 		{
 			'count': count,
 			'result': resultType[result],
@@ -152,12 +152,12 @@ function GetResultCount(results, result)
 
 	for (var i=0 ; ; i++)
 	{
-		if (results[i] == undefined)
+		if (results['gameResults'][i] == undefined)
 		{
 			break;
 		}
 
-		var result2 = results[i].result;
+		var result2 = results['gameResults'][i].result;
 
 		if (result2 == result)
 		{
@@ -176,12 +176,12 @@ function GetGameDigestStatistics(results)
 
 	for (var i=0 ; ; i++)
 	{
-		if (results[i] == undefined)
+		if (results['gameResults'][i] == undefined)
 		{
 			break;
 		}
 
-		var result = results[i].result;
+		var result = results['gameResults'][i].result;
 
 		if (result != 'ボーナス')
 		{
@@ -274,17 +274,17 @@ function GetCurrentCredit(results)
 	var i;
 	var credit = 0;
 
-	for (i=0 ; i<results.count ; i++)
+	for (i=0 ; i<results['gameResults'].count ; i++)
 	{
-		var incredit = parseInt(results[i].in);
-		var outcredit = parseInt(results[i].out);
+		var incredit = parseInt(results['gameResults'][i].in);
+		var outcredit = parseInt(results['gameResults'][i].out);
 		var bet;
 
-		if (results[i].bet != undefined)
+		if (results['gameResults'][i].bet != undefined)
 		{
 			// ベット指定あり。
 
-			bet = parseInt(results[i].bet);
+			bet = parseInt(results['gameResults'][i].bet);
 		}
 		else
 		{
@@ -295,7 +295,7 @@ function GetCurrentCredit(results)
 
 		credit += incredit + outcredit;
 
-		if (results[i].result != 'ボーナス')
+		if (results['gameResults'][i].result != 'ボーナス')
 		{
 			// ボーナスではない。
 

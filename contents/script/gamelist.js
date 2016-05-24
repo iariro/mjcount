@@ -142,6 +142,7 @@ function addGame()
 	localStorage["gamecount"] = parseInt(gamecount) + 1;
 
 	var results = {};
+	results['gameResults'] = {};
 	results['count'] = 0;
 	results['gamecenter'] = document.write.gamecenter.value;
 	results['gamekind'] = document.write.gamekind.value;
