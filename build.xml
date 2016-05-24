@@ -8,7 +8,7 @@
 			<fileset dir="contents">
 				<include name="**/*.html" />
 				<include name="**/*.js" />
-				<include name="**/*.jpg" />
+				<include name="**/*.png" />
 			</fileset>
 		</copy>
 	</target>
