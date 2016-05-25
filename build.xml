@@ -4,7 +4,7 @@
 	<property file="../../../build.properties" />
 
 	<target name="deploy">
-		<copy todir="${APACHE_HTDOCS_PATH}/mjcount/">
+		<copy todir="${APACHE_HTDOCS_PATH}/mjcount-js/">
 			<fileset dir="contents">
 				<include name="**/*.html" />
 				<include name="**/*.js" />
