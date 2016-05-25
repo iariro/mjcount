@@ -53,7 +53,7 @@ function addResult(result)
 	var index = localStorage["currentIndex"];
 	var json = localStorage["results" + index];
 	var results = str2obj(json);
-	var count = results.count;
+	var count = parseInt(results.count);
 
 	var datetime = new Date();
 	var diff = datetime.getTime() - parseInt(results.startdatetime);
