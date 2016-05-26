@@ -108,9 +108,17 @@ function displayGamelist()
 		table.deleteRow(1);
 	}
 
+	var index = 0;
+
 	for (i=0 ; i<gamecount ; i++)
 	{
 		var json = localStorage["results" + i];
+
+		if (json == undefined)
+		{
+			continue;
+		}
+
 		results = str2obj(json);
 
 		var datetime = new Date();
@@ -118,18 +126,20 @@ function displayGamelist()
 
 		table.insertRow(-1);
 
-		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[0].innerHTML =
+		table.rows[index + 1].insertCell(-1);
+		table.rows[index + 1].cells[0].innerHTML =
 			"<input type='button' value='入力' onclick='gotoInputPage(" + i + ")'>";
 
-		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[1].innerHTML = DateGetStringJp(datetime).substr(2, 8);
+		table.rows[index + 1].insertCell(-1);
+		table.rows[index + 1].cells[1].innerHTML = DateGetStringJp(datetime).substr(2, 8);
 
-		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[2].innerHTML = results != undefined ? results.gamecenter : '-';
+		table.rows[index + 1].insertCell(-1);
+		table.rows[index + 1].cells[2].innerHTML = results != undefined ? results.gamecenter : '-';
 
-		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[3].innerHTML = results != undefined ? results.gamekind : '-';
+		table.rows[index + 1].insertCell(-1);
+		table.rows[index + 1].cells[3].innerHTML = results != undefined ? results.gamekind : '-';
+
+		index++;
 	}
 }
 

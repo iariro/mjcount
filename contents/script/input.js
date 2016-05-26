@@ -24,7 +24,10 @@ function initInputPage()
 	var datetime = new Date();
 	datetime.setTime(results.startdatetime);
 
-	document.getElementById("datetime_gamecenter").innerHTML = results.gamecenter + " " + results.gamekind;
+	document.getElementById("datetime_gamecenter").innerHTML =
+		index + " " +
+		results.gamecenter + " " +
+		results.gamekind;
 	document.getElementById("gamekind").innerHTML = DateGetStringJp(datetime);
 
 	printStat(results, currentCredit);
@@ -43,6 +46,13 @@ function gotoExportPage()
 function gotoStatisticsPage()
 {
 	parent.document.getElementById("content_frame").src = 'statistics.html';
+}
+
+function deletePlayData()
+{
+	var index = localStorage["currentIndex"];
+	delete localStorage["results" + index];
+	parent.document.getElementById("content_frame").src = 'gamelist.html';
 }
 
 function printStat(results, currentCredit)
