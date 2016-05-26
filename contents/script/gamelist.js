@@ -73,7 +73,7 @@ function initGameListPage()
 {
 	setSelectionControl('gamecenter', gameCenterList);
 	setSelectionControl('gamekind', gameKindList);
-	updateGamelist();
+	displayGamelist();
 }
 
 function setSelectionControl(controlName, values)
@@ -92,7 +92,7 @@ function setSelectionControl(controlName, values)
 	}
 }
 
-function updateGamelist()
+function displayGamelist()
 {
 	var gamecount = localStorage["gamecount"];
 	if (gamecount == undefined)
@@ -113,21 +113,23 @@ function updateGamelist()
 		var json = localStorage["results" + i];
 		results = str2obj(json);
 
+		var datetime = new Date();
+		datetime.setTime(results.startdatetime);
+
 		table.insertRow(-1);
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[0].innerHTML = i;
+		table.rows[i + 1].cells[0].innerHTML =
+			"<input type='button' value='入力' onclick='gotoInputPage(" + i + ")'>";
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[1].innerHTML = results != undefined ? results.gamecenter : '-';
+		table.rows[i + 1].cells[1].innerHTML = DateGetStringJp(datetime).substr(2, 8);
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[2].innerHTML = results != undefined ? results.gamekind : '-';
+		table.rows[i + 1].cells[2].innerHTML = results != undefined ? results.gamecenter : '-';
 
 		table.rows[i + 1].insertCell(-1);
-		table.rows[i + 1].cells[3].innerHTML =
-			"<input type='button' value='入力' onclick='gotoInputPage(" + i + ")'>" +
-			"<input type='button' value='エクスポート' onclick='gotoExportPage(" + i + ")'>";
+		table.rows[i + 1].cells[3].innerHTML = results != undefined ? results.gamekind : '-';
 	}
 }
 
@@ -165,17 +167,11 @@ function resetGames()
 	}
 
 	localStorage["gamecount"] = 0;
-	updateGamelist();
+	displayGamelist();
 }
 
 function gotoInputPage(index)
 {
 	localStorage["currentIndex"] = index;
 	parent.document.getElementById("content_frame").src = 'input.html';
-}
-
-function gotoExportPage(index)
-{
-	localStorage["currentIndex"] = index;
-	parent.document.getElementById("content_frame").src = 'export.html';
 }

@@ -21,12 +21,28 @@ function initInputPage()
 	var currentCredit = GetCurrentCredit(results);
 	localStorage["currentCredit" + index] = currentCredit;
 
+	var datetime = new Date();
+	datetime.setTime(results.startdatetime);
+
+	document.getElementById("datetime_gamecenter").innerHTML = results.gamecenter + " " + results.gamekind;
+	document.getElementById("gamekind").innerHTML = DateGetStringJp(datetime);
+
 	printStat(results, currentCredit);
 }
 
 function gotoGameListPage()
 {
 	parent.document.getElementById("content_frame").src = 'gamelist.html';
+}
+
+function gotoExportPage()
+{
+	parent.document.getElementById("content_frame").src = 'export.html';
+}
+
+function gotoStatisticsPage()
+{
+	parent.document.getElementById("content_frame").src = 'statistics.html';
 }
 
 function printStat(results, currentCredit)

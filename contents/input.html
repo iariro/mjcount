@@ -6,7 +6,8 @@
 
 <body onload='initInputPage()'>
 <form name="write">
-	<input type="button" onclick="gotoGameListPage()" value="戻る">
+	<div id="datetime_gamecenter">-</div>
+	<div id="gamekind">-</div>
 	<table border>
 		<tr><th>result</td><th>count</th></tr>
 		<tr>
@@ -59,12 +60,18 @@
 	<tr><td>bet</td><td><input type="text" name="betcredit" value="1"></td><td><input type="button" onclick="bet_up()" value="↑"></td><td><input type="button" onclick="bet_down()" value="↓"></td></tr>
 	</table>
 
+	<hr>
+
+	<div id="label1">-</div>
+	<div id="label2">-</div>
+
+	<table><tr>
+	<td><input type='button' value='戻る' onclick='gotoGameListPage()'></td>
+	<td><input type='button' value='統計' onclick='gotoStatisticsPage()'></td>
+	<td><input type='button' value='エクスポート' onclick='gotoExportPage()'></td>
+	</tr></table>
+
 </form>
-
-<hr>
-
-<div id="label1">-</div>
-<div id="label2">-</div>
 
 </body>
 </html>
