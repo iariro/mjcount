@@ -52,3 +52,44 @@ function DateGetStringJp(date_obj)
 		((minutes < 10) ? "0" : "") + minutes + ":" +
 		((seconds < 10) ? "0" : "") + seconds;
 }
+
+/// <summary>
+/// 現状のクレジット数取得。
+/// </summary>
+/// <returns>クレジット数</returns>
+function GetCurrentCredit(results)
+{
+	var i;
+	var credit = 0;
+
+	for (i=0 ; i<results['gameResults'].count ; i++)
+	{
+		var incredit = parseInt(results['gameResults'][i].in);
+		var outcredit = parseInt(results['gameResults'][i].out);
+		var bet;
+
+		if (results['gameResults'][i].bet != undefined)
+		{
+			// ベット指定あり。
+
+			bet = parseInt(results['gameResults'][i].bet);
+		}
+		else
+		{
+			// ベット指定なし。
+
+			bet = 1;
+		}
+
+		credit += incredit + outcredit;
+
+		if (results['gameResults'][i].result != 'ボーナス')
+		{
+			// ボーナスではない。
+
+			credit -= bet;
+		}
+	}
+
+	return credit;
+}
