@@ -39,7 +39,11 @@ function initExportPage()
 		playNode.setAttributeNode(attribute);
 
 		var attribute = xmlDocument.createAttribute("dt");
-		attribute.nodeValue = results['gameResults'][key].time;
+		var datetime = new Date();
+		var diff = /*parseInt(results.startdatetime) +*/ parseInt(results['gameResults'][key].time);
+		var adjust = datetime.getTimezoneOffset() * 60 * 1000;
+		var timespan = new Date(diff + adjust);
+		attribute.nodeValue = timespan.toTimeString().substr(0, 8);
 		playNode.setAttributeNode(attribute);
 
 		var attribute = xmlDocument.createAttribute("in");

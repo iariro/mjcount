@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Version: 2016/04/28 18:00:00
+# Version: 2016/06/06 18:00:00
 
 # NETWORK:
 CACHE:
@@ -13,3 +13,4 @@ script/export.js
 script/gamelist.js
 script/input.js
 script/mjcount.js
+script/creditprogressgraph.js

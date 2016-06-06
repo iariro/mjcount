@@ -48,6 +48,11 @@ function gotoStatisticsPage()
 	parent.document.getElementById("content_frame").src = 'statistics.html';
 }
 
+function gotoCreditGraphPage()
+{
+	parent.document.getElementById("content_frame").src = 'creditprogressgraph.html';
+}
+
 function deletePlayData()
 {
 	var index = localStorage["currentIndex"];
@@ -90,7 +95,7 @@ function addResult(result)
 		{
 			'count': count,
 			'result': resultType[result],
-			'time': timespan.toTimeString().substr(0, 8),
+			'time': diff,//timespan.toTimeString().substr(0, 8),
 			'in': document.write.incredit.value,
 			'out': document.write.outcredit.value
 		};

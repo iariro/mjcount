@@ -17,17 +17,23 @@ var lineWidth2 = 8;
 /**
  * グラフ全体横幅。
  */
-var screenWidth = 800;
+var screenWidth = 310;
+var screenHeight = 400;
 
 /**
  * 左上原点座標。
  */
-var originPosition = { X:40, Y:15 };
+var originPosition = { x:10, y:10 };
 
-/**
- * フォント名。
- */
-var fontFamily = "MS-Mincho";
+function initCreditProgressGraphPage()
+{
+	drawCreditProgressGraph();
+}
+
+function gotoInputPage()
+{
+	parent.document.getElementById("content_frame").src = 'input.html';
+}
 
 /**
  * 指定のゲーム内容からクレジット遷移グラフXMLを構築する。
@@ -38,6 +44,8 @@ var fontFamily = "MS-Mincho";
  */
 function drawCreditProgressGraph()
 {
+	var i;
+	var j;
 	var index = localStorage["currentIndex"];
 	var json = localStorage["results" + index];
 	var results = str2obj(json);
@@ -45,16 +53,37 @@ function drawCreditProgressGraph()
 
 	var lastlast = results.gameResults[count - 1];
 
-	var totalsecond = new DateTime(lastlast.time);
+	var totalsecond = Math.round(lastlast.time / 1000);
 
 	var xscale;
 
 	// 最大クレジットを決定。
-	var maxCredit = GetCurrentCredit(results);
+	var maxCredit;
 	var minCredit = 0;
+	var credit = 0;
 
-	maxCredit = ((maxCredit + 4) / 5) * 5;
-	minCredit = ((minCredit - 4) / 5) * 5;
+	for (j=0 ; j<results.count ; j++)
+	{
+		credit += parseInt(results.gameResults[j].out) + parseInt(results.gameResults[j].in);
+
+		if (results.gameResults[j].result == "ボーナス")
+		{
+			credit -= parseInt(results.gameResults[j].bet);
+		}
+
+		if (maxCredit == undefined || maxCredit < credit)
+		{
+			maxCredit = credit;
+		}
+
+		if (minCredit == undefined || minCredit > credit)
+		{
+			minCredit = credit;
+		}
+	}
+
+	maxCredit = Math.round((maxCredit + 4) / 5) * 5;
+	minCredit = Math.round((minCredit - 4) / 5) * 5;
 
 	var creditHeight = maxCredit - minCredit;
 
@@ -71,7 +100,7 @@ function drawCreditProgressGraph()
 		creditHeight = 25;
 	}
 
-	var Math.round(sizeHeight = 550 / creditHeight);
+	var sizeHeight = Math.round(screenHeight / creditHeight);
 
 	if (totalsecond >= screenWidth)
 	{
@@ -118,85 +147,50 @@ function drawCreditProgressGraph()
 
 	var title = results.gamecenter + results.gamekind;
 
+	var datetime = new Date();
+	datetime.setTime(results.startdatetime);
+
 	drawText(
 		originPosition.x,
 		originPosition.y + sizeHeight * creditHeight + 30,
-		"日時：" + results.starttime /* + " - " + endtime3) */;
+		"日時：" + DateGetStringJp(datetime),
+		"black");
 
 	drawText(
 		originPosition.x,
 		originPosition.y + sizeHeight * creditHeight + 50,
-		"場所：" + results.gamecenter);
+		"場所：" + results.gamecenter,
+		"black");
 
 	var gameKinds = "";
 
-//////////////////////////////////////////////////////////////////////
+	gameKinds += results.gamekind;
 
-	for (int i=0 ; i<list.length ; i++)
-	{
-		if (i > 0)
-		{
-			// ２個目以降。
-
-			gameKinds += "／";
-		}
-
-		gameKinds += list[i].gameKind;
-	}
-
-	element = createElement("text");
-	element.setAttribute(
-		"x",
-		String.valueOf(originPosition.x));
-	element.setAttribute(
-		"y",
-		String.valueOf(originPosition.y + sizeHeight * creditHeight + 70));
-	element.setAttribute("font-family", fontFamily);
-	element.appendChild(createTextNode("機種：" + gameKinds));
-	top.appendChild(element);
-
-	if (comment != null && !comment.isEmpty())
-	{
-		// コメントあり。
-
-		element = createElement("text");
-		element.setAttribute(
-			"x",
-			String.valueOf(originPosition.x));
-		element.setAttribute(
-			"y",
-			String.valueOf(originPosition.y + sizeHeight * creditHeight + 90));
-		element.setAttribute("font-family", fontFamily);
-		element.appendChild(createTextNode("コメント：" + comment));
-		top.appendChild(element);
-	}
+	drawText(originPosition.x, originPosition.y + sizeHeight * creditHeight + 70, "機種：" + gameKinds, "black");
 
 	// 枠描画。
-	element = createElement("rect");
-	element.setAttribute(
-		"x",
-		String.valueOf(originPosition.x));
-	element.setAttribute(
-		"y",
-		String.valueOf(originPosition.y));
-	element.setAttribute(
-		"width",
-		Integer.toString((totalsecond + memoriInterval) / xscale));
-	element.setAttribute(
-		"height",
-		Integer.toString(sizeHeight * creditHeight));
-	element.setAttribute(
-		"fill",
+	//	"fill",
+	//	"#eeeeee");
+	//	"stroke",
+	//	"gray");
+	fillRect(
+		originPosition.x,
+		originPosition.y,
+		(totalsecond + memoriInterval) / xscale,
+		sizeHeight * creditHeight,
 		"#eeeeee");
-	element.setAttribute(
-		"stroke",
+
+	drawRect(
+		originPosition.x,
+		originPosition.y,
+		(totalsecond + memoriInterval) / xscale,
+		sizeHeight * creditHeight,
 		"gray");
-	top.appendChild(element);
 
 	// 横軸目盛り描画。
-	for (int i=0 ; i<totalsecond + memoriInterval ; i+=memoriInterval)
+	for (i=0 ; i<totalsecond + memoriInterval ; i+=memoriInterval)
 	{
-		int length;
+		var length;
 
 		if (i % 3600 == 0)
 		{
@@ -211,62 +205,39 @@ function drawCreditProgressGraph()
 			length = 5;
 		}
 
-		element = createElement("line");
-		element.setAttribute(
-			"x1",
-			Integer.toString(originPosition.x + (i / xscale)));
-		element.setAttribute(
-			"y1",
-			Integer.toString(originPosition.y + sizeHeight * creditHeight));
-		element.setAttribute(
-			"x2",
-			Integer.toString(originPosition.x + (i / xscale)));
-		element.setAttribute(
-			"y2",
-			Integer.toString
-				(originPosition.y + sizeHeight * creditHeight + length));
-		element.setAttribute("stroke", "black");
-		top.appendChild(element);
+		//element.setAttribute("stroke", "black");
+		drawLine(
+			originPosition.x + (i / xscale),
+			originPosition.y + sizeHeight * creditHeight,
+			originPosition.x + (i / xscale),
+			originPosition.y + sizeHeight * creditHeight + length,
+			"black");
 	}
 
 	// 縦軸目盛り描画。
-	for (int i=5 ; i<creditHeight ; i+= 5)
+	for (i=5 ; i<creditHeight ; i+= 5)
 	{
-		element = createElement("line");
-		element.setAttribute(
-			"x1",
-			Integer.toString(originPosition.x - 5));
-		element.setAttribute(
-			"y1",
-			Integer.toString
-				(originPosition.y + sizeHeight * (creditHeight - i)));
-		element.setAttribute(
-			"x2",
-			Integer.toString(
-				originPosition.x +
-				((totalsecond + memoriInterval) / xscale) + 5));
-		element.setAttribute(
-			"y2",
-			Integer.toString
-				(originPosition.y + sizeHeight * (creditHeight - i)));
-		element.setAttribute(
-			"stroke",
-			"black");
-		element.setAttribute(
-			"stroke-width",
-			"0.5");
+		//	"stroke",
+		//	"black");
+		//	"stroke-width",
+		//	"0.5");
 
 		if ((i + minCredit) % 10 == 5 || (i + minCredit) % 10 == -5)
 		{
 			// 5クレジット刻み。
 
-			element.setAttribute("stroke-dasharray", "3,3");
+			//element.setAttribute("stroke-dasharray", "3,3");
 		}
 
-		top.appendChild(element);
+		drawLine(
+			originPosition.x - 5,
+			originPosition.y + sizeHeight * (creditHeight - i),
+			originPosition.x + ((totalsecond + memoriInterval) / xscale) + 5,
+			originPosition.y + sizeHeight * (creditHeight - i),
+			"black");
 	}
 
-	int step;
+	var step;
 
 	if (creditHeight < 70)
 	{
@@ -281,7 +252,7 @@ function drawCreditProgressGraph()
 		step = 10;
 	}
 
-	int startY = 0;
+	var startY = 0;
 
 	if (minCredit % 10 == 5 || minCredit % 10 == -5)
 	{
@@ -290,114 +261,89 @@ function drawCreditProgressGraph()
 		startY = 5;
 	}
 
-	for (int i=startY ; i<=creditHeight ; i+= step)
+	for (i=startY ; i<=creditHeight ; i+= step)
 	{
-		element = createElement("text");
-		element.setAttribute(
-			"x",
-			String.valueOf(originPosition.x - 8));
-		element.setAttribute(
-			"y",
-			String.valueOf(
-				originPosition.y +
-				sizeHeight * (creditHeight - i) + 5));
-		element.setAttribute("font-family", fontFamily);
-		element.setAttribute("text-anchor", "end");
-		element.appendChild
-			(createTextNode(Integer.toString(i + minCredit)));
-		top.appendChild(element);
+		//element.setAttribute("text-anchor", "end");
+		drawText(
+			originPosition.x - 8,
+			originPosition.y + sizeHeight * (creditHeight - i) + 5,
+			i + minCredit,
+			"black");
 	}
 
 	// 折れ線文字列生成。
-	for (int i=0 ; i<list.length ; i++)
+	for (i=0 ; i<1 ; i++)
 	{
-		int offset =
-			list[i].starttime.diff(list[0].starttime).getTotalSecond();
+		var credit = 0;
+		var offset = 0;
+			//list[i].starttime.diff(list[0].starttime).getTotalSecond();
 
+			/*
 		if (list.length > 1)
 		{
 			// 複数ゲームの場合。
 
-			element = createElement("text");
-			element.setAttribute(
-				"x",
-				String.valueOf(originPosition.x + offset / xscale));
-			element.setAttribute(
-				"y",
-				String.valueOf(
-					originPosition.y +
-					sizeHeight * (creditHeight - (i % 2) * 10) / 2));
-			element.setAttribute("font-family", fontFamily);
-			element.appendChild(createTextNode(list[i].gameKind));
-			top.appendChild(element);
-		}
-
-		String points =
-			String.format(
-				"%d %d",
+			drawText(
 				originPosition.x + offset / xscale,
-				originPosition.y + sizeHeight * (creditHeight + minCredit));
-		boolean onbreak = false;
-		int previousSecond = offset;
+				originPosition.y + sizeHeight * (creditHeight - (i % 2) * 10) / 2,
+				gameKind);
+		}
+		*/
 
-		for (int j=0 ; j<list[i].size() + 1 ; j++)
+		var points = new Array();
+		points.push({
+			x:originPosition.x + offset / xscale,
+			y:originPosition.y + sizeHeight * (creditHeight + minCredit)});
+		var onbreak = false;
+		var previousSecond = offset;
+
+		for (j=0 ; j<results.count + 1 ; j++)
 		{
-			if (j < list[i].size())
+			credit += parseInt(results.gameResults[j].out) + parseInt(results.gameResults[j].in);
+
+			if (results.gameResults[j].result == "ボーナス")
+			{
+				credit -= results.gameResults[j].bet;
+			}
+
+			if (j < results.count)
 			{
 				// 配列の範囲内。
 
-				int second =
-					offset +
-					new TimeSpan(list[i].get(j).getProgress()).getTotalSecond();
+				var second = offset + results.gameResults[j].time / 1000;
 
-				points += ", ";
-
-				points +=
-					String.format(
-						"%d %d",
-						originPosition.x + second / xscale,
-						originPosition.y +
-						sizeHeight * (creditHeight - list[i].get(j).getCredit() + minCredit));
+				points.push({
+						x:originPosition.x + second / xscale,
+						y:originPosition.y +
+						sizeHeight * (creditHeight - credit + minCredit)});
 
 				if (onbreak)
 				{
 					// 間が置かれた直後。
 
 					// 終端。実線の折れ線描画。
-					element = createElement("polyline");
-					element.setAttribute("points", points);
-					element.setAttribute("stroke", "black");
-					element.setAttribute(
-						"stroke-width",
-						Integer.toString(lineWidth1));
-					element.setAttribute("stroke-dasharray", "8,3");
-					element.setAttribute("fill", "none");
-					top.appendChild(element);
+					drawPolyline(points, 'black', lineWidth1);
 
 					onbreak = false;
 
-					points =
-						String.format(
-							"%d %d",
-							originPosition.x + second / xscale,
-							originPosition.y +
-							sizeHeight *
-							(creditHeight - list[i].get(j).getCredit() + minCredit));
+					points = new Array();
+					points.push({
+						x:originPosition.x + second / xscale,
+						y:originPosition.y + sizeHeight * (creditHeight - credit + minCredit)});
 				}
 				else
 				{
 					// 間が置かれた直後ではない。
 
-					boolean draw = false;
+					var draw = false;
 
-					if (j < list[i].size() - 1)
+					if (j < parseInt(results.count) - 1)
 					{
 						// 終端ではない。
 
-						String nextProgress = list[i].get(j + 1).getProgress();
+						var nextProgress = results.gameResults[j + 1].time;
 
-						int nextSecond =
-							new TimeSpan(nextProgress).getTotalSecond();
+						var nextSecond = parseInt(nextProgress) / 1000;
 
 						if (nextSecond - second >= breakTime)
 						{
@@ -419,134 +365,153 @@ function drawCreditProgressGraph()
 						// 実線を描画するタイミングである。
 
 						// 実線の折れ線描画。
-						element = createElement("polyline");
-						element.setAttribute("points", points);
-						element.setAttribute("stroke", "black");
-						element.setAttribute(
-							"stroke-width",
-							Integer.toString(lineWidth1));
-						element.setAttribute("fill", "none");
-						top.appendChild(element);
+						drawPolyline(points, 'black', lineWidth1);
 
-						points =
-							String.format(
-								"%d %d",
-								originPosition.x + second / xscale,
-								originPosition.y +
-								sizeHeight *
-								(creditHeight - list[i].get(j).getCredit() + minCredit));
+						points = new Array();
+						points.push({
+							x:originPosition.x + second / xscale,
+							y:originPosition.y + sizeHeight * (creditHeight - results.gameResults[j].credit + minCredit)});
 					}
 
-					int pcredit = j > 0 ? list[i].get(j - 1).getCredit() : 0;
+					var pcredit = j > 0 ? results.gameResults[j - 1].credit : 0;
 
-					if (list[i].get(j).getInCreditMinusBet() >= 1 &&
-						creditGraph)
+					if (results.gameResults[j].inCreditMinusBet >= 1 && creditGraph)
 					{
 						// 過剰クレジット。
 
-						element = createElement("line");
-						element.setAttribute(
-							"x1",
-							Integer.toString
-								(originPosition.x + previousSecond / xscale));
-						element.setAttribute(
-							"y1",
-							Integer.toString
-								(originPosition.y +
-								sizeHeight *
-								(creditHeight - pcredit + minCredit)));
-						element.setAttribute(
-							"x2",
-							Integer.toString
-								(originPosition.x + (previousSecond + ((second - previousSecond) * list[i].get(j).getInCreditRatio()) / 100) / xscale));
-						element.setAttribute(
-							"y2",
-							Integer.toString(
-								originPosition.y +
-								sizeHeight *
-								(creditHeight - (pcredit + list[i].get(j).getInCreditMinusBet()) + minCredit)));
-						element.setAttribute(
-							"stroke",
+						// "stroke", "pink");
+						// "stroke-width", lineWidth2));
+						drawLine(
+							originPosition.x + previousSecond / xscale,
+							originPosition.y + sizeHeight * (creditHeight - pcredit + minCredit),
+							originPosition.x + (previousSecond + ((second - previousSecond) * results.gameresults[j].inCreditRatio) / 100) / xscale,
+							originPosition.y + sizeHeight * (creditHeight - (pcredit + results.gameresults[j].inCreditMinusBet) + minCredit),
 							"pink");
-						element.setAttribute(
-							"stroke-width",
-							Integer.toString(lineWidth2));
-						top.appendChild(element);
 					}
 				}
 
-				if (list[i].get(j).getResult().equals("ボーナス"))
+				if (results.gameResults[j].result == "ボーナス")
 				{
 					// ボーナスである。
 
 					// 実線描画。
-					element = createElement("line");
-					element.setAttribute(
-						"x1",
-						Integer.toString
-							(originPosition.x + previousSecond / xscale));
-					element.setAttribute(
-						"y1",
-						Integer.toString
-							(originPosition.y +
-							sizeHeight *
-							(creditHeight - list[i].get(j - 1).getCredit() + minCredit)));
-					element.setAttribute(
-						"x2",
-						Integer.toString
-							(originPosition.x + second / xscale));
-					element.setAttribute(
-						"y2",
-						Integer.toString(
-							originPosition.y +
-							sizeHeight *
-							(creditHeight - list[i].get(j).getCredit() + minCredit)));
-					element.setAttribute(
-						"stroke",
+					// "stroke", "blue");
+					// "stroke-width", lineWidth2));
+					drawLine(
+						originPosition.x + previousSecond / xscale,
+						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].getCredit() + minCredit),
+						originPosition.x + second / xscale,
+						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j].getCredit() + minCredit),
 						"blue");
-					element.setAttribute(
-						"stroke-width",
-						Integer.toString(lineWidth2));
-					top.appendChild(element);
 				}
 
 				previousSecond = second;
 			}
+			/*
 			else if (list.length > 1)
 			{
 				// 末尾。
 
 				// ペイアウトを表す点線を描画。
-				element = createElement("line");
-				element.setAttribute(
-					"x1",
-					Integer.toString
-						(originPosition.x + previousSecond / xscale));
-				element.setAttribute(
-					"y1",
-					Integer.toString(
-						originPosition.y +
-						sizeHeight *
-						(creditHeight - list[i].get(j - 1).getCredit() + minCredit)));
-				element.setAttribute(
-					"x2",
-					Integer.toString
-						(originPosition.x + previousSecond / xscale));
-				element.setAttribute(
-					"y2",
-					Integer.toString
-						(originPosition.y + sizeHeight * (creditHeight + minCredit)));
-				element.setAttribute(
-					"stroke",
+				// "stroke", "black");
+				// "stroke-dasharray", "8,3");
+				// "stroke-width", lineWidth1));
+				drawLine(
+					originPosition.x + previousSecond / xscale,
+					originPosition.y + sizeHeight * (creditHeight - list[i].get(j - 1).getCredit() + minCredit),
+					originPosition.x + previousSecond / xscale,
+					originPosition.y + sizeHeight * (creditHeight + minCredit),
 					"black");
-				element.setAttribute(
-					"stroke-dasharray",
-					"8,3");
-				element.setAttribute(
-					"stroke-width",
-					Integer.toString(lineWidth1));
-				top.appendChild(element);
 			}
+			*/
 		}
+	}
+}
+
+function drawLine(x1, y1, x2, y2, color)
+{
+	var canvas = document.getElementById("graphcanvas");
+	var context = canvas.getContext("2d");
+
+	if (color != undefined)
+	{
+		context.strokeStyle = color;
+	}
+
+	context.beginPath();
+	context.moveTo(x1, y1);
+	context.lineTo(x2, y2);
+	context.closePath();
+	context.stroke();
+}
+
+function fillRect(x1, y1, x2, y2, color)
+{
+	var canvas = document.getElementById("graphcanvas");
+	var context = canvas.getContext("2d");
+
+	if (color != undefined)
+	{
+		context.fillStyle = color;
+	}
+
+	context.fillRect(x1, y1, x2, y2);
+}
+
+function drawRect(x1, y1, x2, y2, color)
+{
+	var canvas = document.getElementById("graphcanvas");
+	var context = canvas.getContext("2d");
+
+	if (color != undefined)
+	{
+		context.strokeStyle = color;
+	}
+
+	context.strokeRect(x1, y1, x2, y2);
+}
+
+function drawText(x, y, text, color)
+{
+	var canvas = document.getElementById("graphcanvas");
+	var context = canvas.getContext("2d");
+
+	if (color != undefined)
+	{
+		context.strokeStyle = color;
+	}
+
+	context.strokeText(text, x, y);
+}
+
+function drawPolyline(points, color, lineWidth)
+{
+	var i;
+
+	var canvas = document.getElementById("graphcanvas");
+	var context = canvas.getContext("2d");
+
+	/*
+		element.setAttribute("points", points);
+		element.setAttribute("stroke", "black");
+		element.setAttribute(
+			"stroke-width",
+			Integer.toString(lineWidth1));
+		element.setAttribute("stroke-dasharray", "8,3");
+	*/
+
+	if (color != undefined)
+	{
+		context.strokeStyle = color;
+	}
+
+	if (lineWidth != undefined)
+	{
+		context.lineWidth = lineWidth;
+	}
+
+	for (i=0 ; i<points.length - 1 ; i++)
+	{
+		drawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y, "black");
 	}
 }
