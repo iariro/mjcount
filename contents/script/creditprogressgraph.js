@@ -305,7 +305,14 @@ function drawCreditProgressGraph()
 
 				if (results.gameResults[j].result != "ボーナス")
 				{
-					credit -= parseInt(results.gameResults[j].bet);
+					if (results.gameResults[j].bet != undefined)
+					{
+						credit -= parseInt(results.gameResults[j].bet);
+					}
+					else
+					{
+						credit--;
+					}
 				}
 			}
 
