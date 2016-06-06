@@ -299,11 +299,14 @@ function drawCreditProgressGraph()
 
 		for (j=0 ; j<results.count + 1 ; j++)
 		{
-			credit += parseInt(results.gameResults[j].out) + parseInt(results.gameResults[j].in);
-
-			if (results.gameResults[j].result == "ボーナス")
+			if (j<results.count)
 			{
-				credit -= results.gameResults[j].bet;
+				credit += parseInt(results.gameResults[j].out) + parseInt(results.gameResults[j].in);
+
+				if (results.gameResults[j].result != "ボーナス")
+				{
+					credit -= parseInt(results.gameResults[j].bet);
+				}
 			}
 
 			if (j < results.count)
