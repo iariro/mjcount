@@ -4,13 +4,16 @@ CACHE MANIFEST
 
 # NETWORK:
 CACHE:
+creditprogressgraph.html
 export.html
 gamelist.html
 index.html
 input.html
-image/pai.jpg
+statistics.html
+image/icon.png
+script/creditprogressgraph.js
 script/export.js
 script/gamelist.js
 script/input.js
 script/mjcount.js
-script/creditprogressgraph.js
+script/statistics.js
