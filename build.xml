@@ -8,6 +8,7 @@
 			<fileset dir="contents">
 				<include name="**/*.html" />
 				<include name="**/*.js" />
+				<include name="**/*.manifest" />
 				<include name="**/*.png" />
 			</fileset>
 		</copy>
