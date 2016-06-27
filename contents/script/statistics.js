@@ -15,7 +15,7 @@ function initStatisticsPage()
 	document.getElementById("AgariRatio").innerHTML = stat.AgariRatio;
 	document.getElementById("TenpaiRatio").innerHTML = stat.TenpaiRatio;
 	document.getElementById("LastChance").innerHTML = stat.LastChance;
-	document.getElementById("OutRatio").innerHTML = stat.lastCredit;
+	document.getElementById("OutRatio").innerHTML = stat.OutRatio;
 	document.getElementById("HeikinKakutokuCredit").innerHTML = stat.HeikinKakutokuCredit;
 }
 
@@ -156,7 +156,7 @@ function GetGameStatistics()
 			'nootenCount' : gameCount - tenpaiCount,
 			'lastChanceCount' : lastChanceCount,
 			'lastChanceAgariCount' : lastChanceAgariCount,
-			'AgariRatio' : AgariRatio(agariCount, gameCount - agariCount),
+			'AgariRatio' : AgariRatio(agariCount, gameCount),
 			'TenpaiRatio' : TenpaiRatio(tenpaiCount, gameCount - tenpaiCount),
 			'LastChance' : LastChance(lastChanceAgariCount, lastChanceCount),
 			'OutRatio' : OutRatio(gameCount, credit, inCredit),
@@ -180,7 +180,10 @@ function GetPlayTime(results)
 {
 	if (results.count > 0)
 	{
-		return results['gameResults'][results.count - 1].time;
+		var datetime = new Date();
+		var adjust = datetime.getTimezoneOffset() * 60 * 1000;
+		var timespan = new Date(parseInt(results['gameResults'][results.count - 1].time) + adjust);
+		return timespan.toTimeString().substr(0, 8);
 	}
 	else
 	{
@@ -191,14 +194,14 @@ function GetPlayTime(results)
 /// <summary>
 /// 和了率文字列を取得。
 /// </summary>
-function AgariRatio(agariCount, noAgariCount)
+function AgariRatio(agariCount, gameCount)
 {
-	if (agariCount + noAgariCount > 0)
+	if (gameCount > 0)
 	{
-		var ratio = (agariCount * 10000 / (agariCount + noAgariCount));
+		var ratio = (agariCount * 10000 / gameCount);
 
 			//"{0:f2}%={1}/{2}",
-		return (Math.round(ratio) / 100) + "%=" + agariCount + "/" + (agariCount + noAgariCount);
+		return (Math.round(ratio) / 100) + "%=" + agariCount + "/" + gameCount;
 	}
 	else
 	{
