@@ -36,7 +36,7 @@ function str2obj(str)
 
 function DateGetStringJp(date_obj)
 {
-	// “ú•t/ŠÔ‚ğæ“¾
+	// æ—¥ä»˜/æ™‚é–“ã‚’å–å¾—
 	var year = date_obj.getFullYear();
 	var month = date_obj.getMonth() + 1;
 	var date = date_obj.getDate();
@@ -44,7 +44,7 @@ function DateGetStringJp(date_obj)
 	var minutes = date_obj.getMinutes();
 	var seconds = date_obj.getSeconds();
 
-	// •¶š—ñ‚Æ‚µ‚Ä˜AŒ‹
+	// æ–‡å­—åˆ—ã¨ã—ã¦é€£çµ
 	return year  + "/" +
 		((month < 10) ? "0" : "") + month + "/" +
 		((date	< 10) ? "0" : "") + date + " " +
@@ -54,15 +54,15 @@ function DateGetStringJp(date_obj)
 }
 
 /// <summary>
-/// Œ»ó‚ÌƒNƒŒƒWƒbƒg”æ“¾B
+/// ç¾çŠ¶ã®ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆæ•°å–å¾—ã€‚
 /// </summary>
-/// <returns>ƒNƒŒƒWƒbƒg”</returns>
+/// <returns>ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆæ•°</returns>
 function GetCurrentCredit(results)
 {
 	var i;
 	var credit = 0;
 
-	for (i=0 ; i<results['gameResults'].count ; i++)
+	for (i=0 ; i<results.count ; i++)
 	{
 		var incredit = parseInt(results['gameResults'][i].in);
 		var outcredit = parseInt(results['gameResults'][i].out);
@@ -70,22 +70,22 @@ function GetCurrentCredit(results)
 
 		if (results['gameResults'][i].bet != undefined)
 		{
-			// ƒxƒbƒgw’è‚ ‚èB
+			// ãƒ™ãƒƒãƒˆæŒ‡å®šã‚ã‚Šã€‚
 
 			bet = parseInt(results['gameResults'][i].bet);
 		}
 		else
 		{
-			// ƒxƒbƒgw’è‚È‚µB
+			// ãƒ™ãƒƒãƒˆæŒ‡å®šãªã—ã€‚
 
 			bet = 1;
 		}
 
 		credit += incredit + outcredit;
 
-		if (results['gameResults'][i].result != 'ƒ{[ƒiƒX')
+		if (results['gameResults'][i].result != 'ãƒœãƒ¼ãƒŠã‚¹')
 		{
-			// ƒ{[ƒiƒX‚Å‚Í‚È‚¢B
+			// ãƒœãƒ¼ãƒŠã‚¹ã§ã¯ãªã„ã€‚
 
 			credit -= bet;
 		}
