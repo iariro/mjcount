@@ -409,9 +409,9 @@ function drawCreditProgressGraph()
 					// "stroke-width", lineWidth2));
 					drawLine(
 						originPosition.x + previousSecond / xscale,
-						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].getCredit() + minCredit),
+						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].credit + minCredit),
 						originPosition.x + second / xscale,
-						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j].getCredit() + minCredit),
+						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j].credit + minCredit),
 						"blue");
 				}
 
@@ -428,7 +428,7 @@ function drawCreditProgressGraph()
 				// "stroke-width", lineWidth1));
 				drawLine(
 					originPosition.x + previousSecond / xscale,
-					originPosition.y + sizeHeight * (creditHeight - list[i].get(j - 1).getCredit() + minCredit),
+					originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].credit + minCredit),
 					originPosition.x + previousSecond / xscale,
 					originPosition.y + sizeHeight * (creditHeight + minCredit),
 					"black");
