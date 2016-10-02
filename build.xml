@@ -14,4 +14,13 @@
 		</copy>
 	</target>
 
+	<target name="codeguess">
+		<taskdef name="codeguess" classname="kumagai.codeguess.CodeGuessTask" classpath="${JAVAPROJECTCHECKER_LIB}" />
+		<codeguess targetfilepath="contents/">
+			<exclude extension="html" code="UTF-8" />
+			<exclude extension="js" code="UTF-8" />
+			<exclude extension="png" />
+		</codeguess>
+	</target>
+
 </project>
