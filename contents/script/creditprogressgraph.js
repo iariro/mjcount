@@ -394,8 +394,8 @@ function drawCreditProgressGraph()
 						drawLine(
 							originPosition.x + previousSecond / xscale,
 							originPosition.y + sizeHeight * (creditHeight - pcredit + minCredit),
-							originPosition.x + (previousSecond + ((second - previousSecond) * results.gameresults[j].inCreditRatio) / 100) / xscale,
-							originPosition.y + sizeHeight * (creditHeight - (pcredit + results.gameresults[j].inCreditMinusBet) + minCredit),
+							originPosition.x + (previousSecond + ((second - previousSecond) * results.gameResults[j].inCreditRatio) / 100) / xscale,
+							originPosition.y + sizeHeight * (creditHeight - (pcredit + results.gameResults[j].inCreditMinusBet) + minCredit),
 							"pink");
 					}
 				}
@@ -404,14 +404,16 @@ function drawCreditProgressGraph()
 				{
 					// ボーナスである。
 
+					var pcredit = j > 0 ? results.gameResults[j - 1].credit : 0;
+
 					// 実線描画。
 					// "stroke", "blue");
 					// "stroke-width", lineWidth2));
 					drawLine(
 						originPosition.x + previousSecond / xscale,
-						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].credit + minCredit),
+						originPosition.y + sizeHeight * (creditHeight - pcredit + minCredit),
 						originPosition.x + second / xscale,
-						originPosition.y + sizeHeight * (creditHeight - results.gameresults[j].credit + minCredit),
+						originPosition.y + sizeHeight * (creditHeight - results.gameResults[j].credit + minCredit),
 						"blue");
 				}
 
@@ -428,7 +430,7 @@ function drawCreditProgressGraph()
 				// "stroke-width", lineWidth1));
 				drawLine(
 					originPosition.x + previousSecond / xscale,
-					originPosition.y + sizeHeight * (creditHeight - results.gameresults[j - 1].credit + minCredit),
+					originPosition.y + sizeHeight * (creditHeight - results.gameResults[j - 1].credit + minCredit),
 					originPosition.x + previousSecond / xscale,
 					originPosition.y + sizeHeight * (creditHeight + minCredit),
 					"black");
