@@ -31,6 +31,13 @@ function initInputPage()
 	document.getElementById("gamekind").innerHTML = DateGetStringJp(datetime);
 
 	printStat(results, currentCredit);
+
+	if (currentCredit > 0)
+	{
+		// まだクレジットはある。
+
+		document.write.incredit.value = '0';
+	}
 }
 
 function gotoGameListPage()
