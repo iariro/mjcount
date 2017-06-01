@@ -124,20 +124,20 @@ function displayGamelist()
 		var datetime = new Date();
 		datetime.setTime(results.startdatetime);
 
-		table.insertRow(-1);
+		table.insertRow(1);
 
-		table.rows[index + 1].insertCell(-1);
-		table.rows[index + 1].cells[0].innerHTML =
+		table.rows[1].insertCell(-1);
+		table.rows[1].cells[0].innerHTML =
 			"<input type='button' value='入力' onclick='gotoInputPage(" + i + ")'>";
 
-		table.rows[index + 1].insertCell(-1);
-		table.rows[index + 1].cells[1].innerHTML = DateGetStringJp(datetime).substr(2, 8);
+		table.rows[1].insertCell(-1);
+		table.rows[1].cells[1].innerHTML = DateGetStringJp(datetime).substr(2, 8);
 
-		table.rows[index + 1].insertCell(-1);
-		table.rows[index + 1].cells[2].innerHTML = results != undefined ? results.gamecenter : '-';
+		table.rows[1].insertCell(-1);
+		table.rows[1].cells[2].innerHTML = results != undefined ? results.gamecenter : '-';
 
-		table.rows[index + 1].insertCell(-1);
-		table.rows[index + 1].cells[3].innerHTML = results != undefined ? results.gamekind : '-';
+		table.rows[1].insertCell(-1);
+		table.rows[1].cells[3].innerHTML = results != undefined ? results.gamekind : '-';
 
 		index++;
 	}
