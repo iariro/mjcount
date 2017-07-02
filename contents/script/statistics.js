@@ -159,7 +159,7 @@ function GetGameStatistics()
 			'AgariRatio' : AgariRatio(agariCount, gameCount),
 			'TenpaiRatio' : TenpaiRatio(tenpaiCount, gameCount - tenpaiCount),
 			'LastChance' : LastChance(lastChanceAgariCount, lastChanceCount),
-			'OutRatio' : OutRatio(gameCount, credit, inCredit),
+			'OutRatio' : OutRatio(gameCount, credit, inCreditSum),
 			'HeikinKakutokuCredit' : HeikinKakutokuCredit(agariCount, outCreditSum)
 		};
 }
@@ -278,7 +278,7 @@ function HeikinKakutokuCredit(agariCount, outCredit)
 	{
 		// 和了あり。
 
-		heikinKakutokuCredit1 = outCredit / agariCount;
+		heikinKakutokuCredit1 = Math.floor(outCredit * 100 / agariCount) / 100;
 			//string.Format("{0:f2}",
 	}
 
