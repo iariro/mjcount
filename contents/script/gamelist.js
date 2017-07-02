@@ -26,7 +26,7 @@ var gameCenterList =
 		'梅ヶ丘アリア',
 		'柏柏泉',
 		'板橋ディンドン',
-		'北千住オモロン'
+		'新小岩レインボー'
 	];
 
 var gameKindList =
