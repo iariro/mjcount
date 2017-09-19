@@ -131,6 +131,12 @@ function addResult(result)
 
 		document.write.incredit.value = '0';
 	}
+	else
+	{
+		// もうクレジットはない。
+
+		document.write.incredit.value = '1';
+	}
 
 	document.write.outcredit.value = '0';
 
